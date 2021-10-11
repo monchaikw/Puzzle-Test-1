@@ -8,8 +8,8 @@ blueColor = (255,0,0)
 whiteColor = (255,255,255)
 boxWidth = 100
 boxHeight = 100
-padWidth = 17
-padHeight = 62
+padLeft = 17
+padBottom = 32
 puzzSize = 4
 puzzle = [ [1,2,3,4], [5,6,7,8], [9,10,11,12], [13,14,15,0] ]
 puzzleActiveNo = 0
@@ -64,12 +64,12 @@ def drawPuzzle( x, y ) :
                 else :
                     drawColor = blueColor
                 number = str(puzzle[row][col])
-                leftNumber = leftBox + padWidth
-                if len(number) == 1 : leftNumber += 15
-                topNumber  = topBox + padHeight
+                xNumber = leftBox + padLeft
+                if len(number) == 1 : xNumber += 15
+                yNumber  = bottomBox - padBottom
                 cv2.rectangle(image, (leftBox,topBox), (rightBox,bottomBox), drawColor, 2)
-                cv2.putText(image, number, (leftNumber-1,topNumber-1), cv2.FONT_HERSHEY_SIMPLEX, 1.5, whiteColor, 3, cv2.FILLED)
-                cv2.putText(image, number, (leftNumber,topNumber), cv2.FONT_HERSHEY_SIMPLEX, 1.5, drawColor, 3, cv2.FILLED)
+                cv2.putText(image, number, (xNumber-1,yNumber-1), cv2.FONT_HERSHEY_SIMPLEX, 1.5, whiteColor, 3, cv2.FILLED)
+                cv2.putText(image, number, (xNumber,yNumber), cv2.FONT_HERSHEY_SIMPLEX, 1.5, drawColor, 3, cv2.FILLED)
     return ( puzzSize, puzzSize )
 
 for i in range(3000) :
@@ -86,7 +86,7 @@ hands = mp_hands.Hands()
 
 while True:
     _, image = cap.read()
-    image = cv2.flip(image, 2)
+    image = cv2.flip(image, 1)
     results = hands.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     if results.multi_hand_landmarks != None :
         pointer = results.multi_hand_landmarks[0].landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
